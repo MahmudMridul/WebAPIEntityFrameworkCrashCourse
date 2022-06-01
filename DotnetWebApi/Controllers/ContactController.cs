@@ -52,14 +52,33 @@ namespace DotnetWebApi.Controllers
 
         // PUT api/<ContactController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult<IEnumerable<Contact>> UpdateContact(int id, Contact Update)
         {
+            Contact contact = Contacts.SingleOrDefault(contact => contact.Id == id);
+
+            if (contact == null) { return NotFound(); }
+
+            contact.FirstName = Update.FirstName;
+            contact.LastName = Update.LastName;
+            contact.NickName = Update.NickName;
+            contact.Place = Update.Place;
+            contact.IsDeleted = Update.IsDeleted;
+            contact.DateCreated = Update.DateCreated;
+
+            return Ok(Contacts);
         }
 
         // DELETE api/<ContactController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<IEnumerable<Contact>> Delete(int id)
         {
+            Contact contact = Contacts.SingleOrDefault(contact => contact.Id == id);
+
+            if (contact == null) { return NotFound(); }
+
+            Contacts.Remove(contact);
+
+            return Ok(Contacts);
         }
     }
 }
