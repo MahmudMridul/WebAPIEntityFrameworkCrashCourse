@@ -22,22 +22,32 @@ namespace DotnetWebApi.Controllers
 
         // GET: api/<ContactController>
         [HttpGet]
-        public IEnumerable<Contact> Get()
+        public ActionResult<IEnumerable<Contact>>  Get()
         {
-            return Contacts;
+            return Ok(Contacts);
         }
 
         // GET api/<ContactController>/5
         [HttpGet("{id}")]
-        public Contact Get(int id)
+        public ActionResult<Contact> Get(int id)
         {
-            return Contacts.SingleOrDefault(contact => contact.Id == id);
+            Contact contact = Contacts.SingleOrDefault(contact => contact.Id == id);
+
+            if(contact == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(contact);
         }
 
         // POST api/<ContactController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<IEnumerable<Contact>> AddContact(Contact NewContact)
         {
+            Contacts.Add(NewContact);
+            return Ok(Contacts);
+
         }
 
         // PUT api/<ContactController>/5
